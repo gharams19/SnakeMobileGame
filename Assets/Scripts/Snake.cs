@@ -100,6 +100,7 @@ public class Snake : MonoBehaviour {
             }
 
             gridPosition += gridMoveDirectionVector;
+            gridPosition = levelGrid.ValidateGridPosition(gridPosition);
             
             bool snakeAteFood = levelGrid.TrySnakeEatFood(gridPosition);
 
@@ -132,7 +133,6 @@ public class Snake : MonoBehaviour {
     private void UpdateSnakeBodyParts() {
         for(int i = 0; i < snakeBodyPartList.Count; i++) {
                 snakeBodyPartList[i].SetSnakeMovePosition(snakeMovePositionList[i]);
-                // snakeBodyPartList[i].transform.eulerAngles = new Vector3(90, snakeBodyPartList[i].transform.eulerAngles.y,  snakeBodyPartList[i].transform.eulerAngles.z );
             }
     }
 

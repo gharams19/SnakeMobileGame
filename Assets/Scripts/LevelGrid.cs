@@ -27,7 +27,7 @@ public class LevelGrid : MonoBehaviour
     private void SpawnFood() {
 
         do {
-            foodGridPosition = new Vector3(Random.Range(0,width), 10, Random.Range(0,height));
+            foodGridPosition = new Vector3(Random.Range(0,width-1), 10, Random.Range(0,height-1));
         } while(snake.GetFullSnakeGridPositionList().IndexOf(foodGridPosition) != -1);
 
         foodGameObject = new GameObject("Food", typeof(SpriteRenderer));
@@ -51,5 +51,20 @@ public class LevelGrid : MonoBehaviour
             return false;
         }
 
+    }
+    public Vector3 ValidateGridPosition(Vector3 gridPosition) { // fix this 
+        if(gridPosition.x < 0.5f) {
+            gridPosition.x = width - 0.5f;
+        }
+        if(gridPosition.x > width - 0.5f) {
+            gridPosition.x = 0.5f;
+        }
+        if(gridPosition.z < -9.5f) {
+            gridPosition.z = height - 0.5f;
+        }
+        if(gridPosition.z > height - 0.5f) {
+            gridPosition.z = -9.5f;
+        }
+        return gridPosition;
     }
 }
