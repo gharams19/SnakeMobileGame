@@ -12,6 +12,11 @@ public class Snake : MonoBehaviour {
         Up,
         Down
     }
+    private enum State {
+        Alive,
+        Dead
+    }
+    private State state;
     private Direction gridMoveDirection;
     private Vector3 gridPosition;
     private float gridMoveTimer;
@@ -35,10 +40,18 @@ public class Snake : MonoBehaviour {
         snakeMovePositionList = new List<SnakeMovePosition>();
         snakeBodySize = 0;
         snakeBodyPartList = new List<SnakeBodyPart>();
+        state = State.Alive;
     }
     private void Update() {
-        HandleInput();
-        HandleGridMovement();
+        switch(state) {
+            case State.Alive:
+                HandleInput();
+                HandleGridMovement();
+                break;
+            case State.Dead:
+                break;
+        }
+        
     }
     private void HandleInput() {
          if(Input.GetKeyDown(KeyCode.UpArrow)) {
@@ -97,11 +110,19 @@ public class Snake : MonoBehaviour {
             if(snakeMovePositionList.Count >= snakeBodySize + 1) {
                 snakeMovePositionList.RemoveAt(snakeMovePositionList.Count - 1);
             }
+            UpdateSnakeBodyParts();
+
+            foreach(SnakeBodyPart snakeBodyPart in snakeBodyPartList) {
+                if(snakeBodyPart.GetGridPosition() ==  gridPosition) {
+                    //Game over
+                    CMDebug.TextPopup("DEAD!", transform.position);
+                    state = State.Dead;
+                }
+            }
 
             transform.position = new Vector3(gridPosition.x, gridPosition.y, gridPosition.z);
             transform.eulerAngles = new Vector3(90,0,GetAngleFromVector(gridMoveDirectionVector) - 90);
 
-            UpdateSnakeBodyParts();
         }
     }
     private void CreateSnakeBodyPart() {
@@ -141,7 +162,7 @@ public class Snake : MonoBehaviour {
         public SnakeBodyPart(int bodyIndex) {
             GameObject snakeBodyGameObject = new GameObject("SnakeBody", typeof(SpriteRenderer));
             snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite = GameAssets.instance.snakeBodySprite;
-            snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder = -bodyIndex;
+            snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder = -1 - bodyIndex;
             transform = snakeBodyGameObject.transform;
             transform.eulerAngles = new Vector3(90, transform.eulerAngles.y, transform.eulerAngles.z);
          
@@ -189,6 +210,9 @@ public class Snake : MonoBehaviour {
             }
             transform.eulerAngles = new Vector3(90,0,angle);
 
+        }
+        public Vector3 GetGridPosition() {
+            return snakeMovePosition.GetGridPosition();
         }
     }
     //Handles one move position from the snake
