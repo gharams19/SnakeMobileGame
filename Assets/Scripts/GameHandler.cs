@@ -6,9 +6,15 @@ using CodeMonkey.Utils;
 
 public class GameHandler : MonoBehaviour
 {
+    private static GameHandler instance;
 
+    private static int score = 0;
     [SerializeField] private Snake snake;
     private LevelGrid levelGrid;
+
+    private void Awake() {
+        instance = this;
+    }
     void Start()
     {
         levelGrid = new LevelGrid(20,10);
@@ -16,5 +22,14 @@ public class GameHandler : MonoBehaviour
         snake.Setup(levelGrid);
         levelGrid.Setup(snake);
     }
+
+    public static int GetScore() {
+        return score;
+    }
+
+    public static void AddScore() {
+        score += 100;
+    }
+
 
 }

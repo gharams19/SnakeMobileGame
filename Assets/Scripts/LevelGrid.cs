@@ -44,6 +44,7 @@ public class LevelGrid : MonoBehaviour
         if(snakeGridPosition == foodGridPosition) {
             Destroy(foodGameObject);
             SpawnFood();
+            GameHandler.AddScore();
             return true;
         
         }
@@ -52,18 +53,18 @@ public class LevelGrid : MonoBehaviour
         }
 
     }
-    public Vector3 ValidateGridPosition(Vector3 gridPosition) { // fix this 
-        if(gridPosition.x < 0.5f) {
-            gridPosition.x = width - 0.5f;
+    public Vector3 ValidateGridPosition(Vector3 gridPosition) { 
+        if(gridPosition.x < 0) {
+            gridPosition.x = width - 1;
         }
-        if(gridPosition.x > width - 0.5f) {
-            gridPosition.x = 0.5f;
+        if(gridPosition.x > width - 1) {
+            gridPosition.x = 0;
         }
-        if(gridPosition.z < -9.5f) {
-            gridPosition.z = height - 0.5f;
+        if(gridPosition.z <= -height) {
+            gridPosition.z = height - 1;
         }
-        if(gridPosition.z > height - 0.5f) {
-            gridPosition.z = -9.5f;
+        if(gridPosition.z > height - 1) {
+            gridPosition.z = -(height-1);
         }
         return gridPosition;
     }

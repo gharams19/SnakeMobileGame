@@ -34,7 +34,7 @@ public class Snake : MonoBehaviour {
 
     private void Awake() {
         gridPosition = new Vector3(10,10,10);
-        gridMoveTimerMax = 0.5f;
+        gridMoveTimerMax = 0.3f;
         gridMoveTimer = gridMoveTimerMax;
         gridMoveDirection = Direction.Right;
         snakeMovePositionList = new List<SnakeMovePosition>();
