@@ -8,12 +8,13 @@ public class GameHandler : MonoBehaviour
 {
     private static GameHandler instance;
 
-    private static int score = 0;
+    private static int score;
     [SerializeField] private Snake snake;
     private LevelGrid levelGrid;
 
     private void Awake() {
         instance = this;
+        InitializeStatic();
     }
     void Start()
     {
@@ -21,6 +22,13 @@ public class GameHandler : MonoBehaviour
 
         snake.Setup(levelGrid);
         levelGrid.Setup(snake);
+        CMDebug.ButtonUI(Vector3.zero, "Reload Scene", () => {
+            Loader.Load(Loader.Scene.GameScene);
+        });
+    }
+
+    private static void InitializeStatic() {
+        score = 0;
     }
 
     public static int GetScore() {
