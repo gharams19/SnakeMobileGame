@@ -116,8 +116,8 @@ public class Snake : MonoBehaviour {
             foreach(SnakeBodyPart snakeBodyPart in snakeBodyPartList) {
                 if(snakeBodyPart.GetGridPosition() ==  gridPosition) {
                     //Game over
-                    CMDebug.TextPopup("DEAD!", transform.position);
                     state = State.Dead;
+                    GameHandler.SnakeDied();
                 }
             }
 
