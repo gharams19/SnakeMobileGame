@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collection.Collection.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey;
 using CodeMonkey.Utils;
@@ -29,10 +29,10 @@ public class Snake : MonoBehaviour {
 
     private void Awake() {
         gridPosition = new Vector3(10,10,10);
-        gridMoveTimerMax = 1f;
+        gridMoveTimerMax = 0.5f;
         gridMoveTimer = gridMoveTimerMax;
         gridMoveDirection = Direction.Right;
-        snakeMovePositionList = new List<Vector3>();
+        snakeMovePositionList = new List<SnakeMovePosition>();
         snakeBodySize = 0;
         snakeBodyPartList = new List<SnakeBodyPart>();
     }
@@ -64,7 +64,7 @@ public class Snake : MonoBehaviour {
 
        
     }
-    private HandleGridMovement() {
+    private void HandleGridMovement() {
          gridMoveTimer += Time.deltaTime;
         if(gridMoveTimer >= gridMoveTimerMax) {
             gridMoveTimer -= gridMoveTimerMax;
@@ -80,10 +80,10 @@ public class Snake : MonoBehaviour {
             Vector3 gridMoveDirectionVector;
             switch(gridMoveDirection) {
                 default:
-                case Direction.Right:   gridMoveDirectionVector = new Vector3(+1,10,0);break;
-                case Direction.Left:    gridMoveDirectionVector = new Vector3(-1,10,0);break;
-                case Direction.Up:      gridMoveDirectionVector = new Vector3(0,10,+1);break;
-                case Direction.Down:    gridMoveDirectionVector = new Vector3(0,10,-1);break;
+                case Direction.Right:   gridMoveDirectionVector = new Vector3(+1,0,0);break;
+                case Direction.Left:    gridMoveDirectionVector = new Vector3(-1,0,0);break;
+                case Direction.Up:      gridMoveDirectionVector = new Vector3(0,0,+1);break;
+                case Direction.Down:    gridMoveDirectionVector = new Vector3(0,0,-1);break;
             }
 
             gridPosition += gridMoveDirectionVector;
@@ -99,7 +99,7 @@ public class Snake : MonoBehaviour {
             }
 
             transform.position = new Vector3(gridPosition.x, gridPosition.y, gridPosition.z);
-            transform.eulerAngles = new Vector3(90,0,GetAngleFromVector(gridMoveDirection) - 90);
+            transform.eulerAngles = new Vector3(90,0,GetAngleFromVector(gridMoveDirectionVector) - 90);
 
             UpdateSnakeBodyParts();
         }
@@ -111,6 +111,7 @@ public class Snake : MonoBehaviour {
     private void UpdateSnakeBodyParts() {
         for(int i = 0; i < snakeBodyPartList.Count; i++) {
                 snakeBodyPartList[i].SetSnakeMovePosition(snakeMovePositionList[i]);
+                // snakeBodyPartList[i].transform.eulerAngles = new Vector3(90, snakeBodyPartList[i].transform.eulerAngles.y,  snakeBodyPartList[i].transform.eulerAngles.z );
             }
     }
 
@@ -139,9 +140,12 @@ public class Snake : MonoBehaviour {
         private Transform transform;
         public SnakeBodyPart(int bodyIndex) {
             GameObject snakeBodyGameObject = new GameObject("SnakeBody", typeof(SpriteRenderer));
-            snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite = GameAssets.instance.snaekBodySprite;
-            snakeBodyTransformList.Add(snakeBodyGameObject.transform);
+            snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite = GameAssets.instance.snakeBodySprite;
             snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder = -bodyIndex;
+            transform = snakeBodyGameObject.transform;
+            transform.eulerAngles = new Vector3(90, transform.eulerAngles.y, transform.eulerAngles.z);
+         
+            
         }
         public void SetSnakeMovePosition(SnakeMovePosition snakeMovePosition) {
             this.snakeMovePosition = snakeMovePosition;
@@ -183,7 +187,7 @@ public class Snake : MonoBehaviour {
                 }
                 break;
             }
-            transform.eulerAngles = new Vector3(0,0,angle);
+            transform.eulerAngles = new Vector3(90,0,angle);
 
         }
     }
