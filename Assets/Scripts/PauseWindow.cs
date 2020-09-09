@@ -17,9 +17,10 @@ public class PauseWindow : MonoBehaviour
         Hide();
     }
     private void Show() {
+       
         gameObject.SetActive(true);
     }
-    private void Hide() {
+    public void Hide() {
         gameObject.SetActive(false);
     }
     public static void ShowStatic() {

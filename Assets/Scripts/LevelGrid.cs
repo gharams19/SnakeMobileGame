@@ -24,7 +24,7 @@ public class LevelGrid : MonoBehaviour
         SpawnFood();
 
     }
-    private void SpawnFood() {
+    public void SpawnFood() {
 
         do {
             foodGridPosition = new Vector3(Random.Range(0,width-1), 10, Random.Range(0,height-1));
@@ -36,23 +36,30 @@ public class LevelGrid : MonoBehaviour
         var rotationVector = foodGameObject.transform.rotation.eulerAngles;
         rotationVector.x = 90f;
         foodGameObject.transform.rotation = Quaternion.Euler(rotationVector);
-
+        BoxCollider boxCollider = foodGameObject.AddComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
 
     }
     
-    public bool TrySnakeEatFood(Vector3 snakeGridPosition) {
-        if(snakeGridPosition == foodGridPosition) {
-            Destroy(foodGameObject);
-            SpawnFood();
-            GameHandler.AddScore();
-            return true;
-        
-        }
-        else {
-            return false;
-        }
-
+    public void snakeAteFood() {
+        Destroy(foodGameObject);
+        SpawnFood();
+        GameHandler.AddScore();
     }
+    // public bool TrySnakeEatFood(Vector3 snakeGridPosition) {
+    
+    //     if(snakeGridPosition == foodGridPosition) {
+    //         Destroy(foodGameObject);
+    //         SpawnFood();
+    //         GameHandler.AddScore();
+    //         return true;
+        
+    //     }
+    //     else {
+    //         return false;
+    //     }
+
+    // }
     public Vector3 ValidateGridPosition(Vector3 gridPosition) { 
         if(gridPosition.x < 0) {
             gridPosition.x = width - 1;

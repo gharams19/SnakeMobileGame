@@ -10,12 +10,13 @@ public class GameHandler : MonoBehaviour
 
     private static int score;
     [SerializeField] private Snake snake;
+
+
     private LevelGrid levelGrid;
 
     private void Awake() {
         instance = this;
         InitializeStatic();
-        GameHandler.ResumeGame();
     }
     private void Start()
     {
@@ -40,6 +41,7 @@ public class GameHandler : MonoBehaviour
 
     private static void InitializeStatic() {
         score = 0;
+        
     }
 
     public static int GetScore() {
@@ -61,6 +63,7 @@ public class GameHandler : MonoBehaviour
 
     public static void PauseGame() {
         PauseWindow.ShowStatic();
+
         Time.timeScale = 0f;
     }
     public static bool IsGamePaused() {

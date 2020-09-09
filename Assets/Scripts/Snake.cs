@@ -18,6 +18,7 @@ public class Snake : MonoBehaviour {
     }
     private State state;
     private Direction gridMoveDirection;
+    private Vector3 gridMoveDirectionVector;
     private Vector3 gridPosition;
     private float gridMoveTimer;
     private float gridMoveTimerMax;
@@ -26,6 +27,13 @@ public class Snake : MonoBehaviour {
     private List<SnakeMovePosition> snakeMovePositionList;
     private List<SnakeBodyPart> snakeBodyPartList;
 
+    private Touch touch;
+    private float speedModifier;
+    bool snakeAteFood;
+
+    private void Start() {
+        speedModifier = 0.01f;
+    }
 
     public void Setup(LevelGrid levelGrid) {
         this.levelGrid = levelGrid;
@@ -33,7 +41,7 @@ public class Snake : MonoBehaviour {
     }
 
     private void Awake() {
-        gridPosition = new Vector3(10,10,10);
+        gridPosition = new Vector3(8,10,1);
         gridMoveTimerMax = 0.3f;
         gridMoveTimer = gridMoveTimerMax;
         gridMoveDirection = Direction.Right;
@@ -46,14 +54,22 @@ public class Snake : MonoBehaviour {
         switch(state) {
             case State.Alive:
                 HandleInput();
-                HandleGridMovement();
                 break;
             case State.Dead:
                 break;
         }
+
+      
+       
+       
         
     }
+
+
+
+        
     private void HandleInput() {
+        //Desktop
          if(Input.GetKeyDown(KeyCode.UpArrow)) {
             if(gridMoveDirection != Direction.Down) {
                 gridMoveDirection = Direction.Up;
@@ -74,11 +90,50 @@ public class Snake : MonoBehaviour {
                 gridMoveDirection = Direction.Left;
             }
         }
+        //Mobile
+
+        Vector3 prevPos = transform.position;
+          if(Input.touchCount > 0) {
+            touch = Input.GetTouch(0);
+
+            if(touch.phase == TouchPhase.Moved) {
+               transform.position = new Vector3 (
+                    transform.position.x + touch.deltaPosition.x * speedModifier,
+                    transform.position.y,
+                    transform.position.z + touch.deltaPosition.y * speedModifier
+                );
+                gridMoveDirectionVector = new Vector3(touch.deltaPosition.x, 0, touch.deltaPosition.y);
+                transform.eulerAngles = new Vector3(90,0,GetAngleFromVector(gridMoveDirectionVector) - 90);
+                
+            }
+           
+        }
+            
+            if(prevPos.x < transform.position.x) {
+                gridMoveDirection = Direction.Right;
+            }
+            if(prevPos.x > transform.position.x) {
+                gridMoveDirection = Direction.Left;
+            }
+            if(prevPos.z < transform.position.z) {
+                gridMoveDirection = Direction.Up;
+            }
+            if(prevPos.z > transform.position.z) {
+                gridMoveDirection = Direction.Down;
+            }
+            
+
+        
+         HandleGridMovement();
+
+        
+        
+        
 
        
     }
     private void HandleGridMovement() {
-         gridMoveTimer += Time.deltaTime;
+        gridMoveTimer += Time.deltaTime;
         if(gridMoveTimer >= gridMoveTimerMax) {
             gridMoveTimer -= gridMoveTimerMax;
 
@@ -90,39 +145,40 @@ public class Snake : MonoBehaviour {
             SnakeMovePosition snakeMovePosition = new SnakeMovePosition(previousSnakeMovePosition, gridPosition,gridMoveDirection);
             snakeMovePositionList.Insert(0,snakeMovePosition);
 
-            Vector3 gridMoveDirectionVector;
-            switch(gridMoveDirection) {
-                default:
-                case Direction.Right:   gridMoveDirectionVector = new Vector3(+1,0,0);break;
-                case Direction.Left:    gridMoveDirectionVector = new Vector3(-1,0,0);break;
-                case Direction.Up:      gridMoveDirectionVector = new Vector3(0,0,+1);break;
-                case Direction.Down:    gridMoveDirectionVector = new Vector3(0,0,-1);break;
-            }
+            // switch(gridMoveDirection) {
+            //     default:
+            //     case Direction.Right:   gridMoveDirectionVector = new Vector3(+1,0,0);break;
+            //     case Direction.Left:    gridMoveDirectionVector = new Vector3(-1,0,0);break;
+            //     case Direction.Up:      gridMoveDirectionVector = new Vector3(0,0,+1);break;
+            //     case Direction.Down:    gridMoveDirectionVector = new Vector3(0,0,-1);break;
+            // }
 
-            gridPosition += gridMoveDirectionVector;
+           
+
+
+            gridPosition = transform.position;
+
             gridPosition = levelGrid.ValidateGridPosition(gridPosition);
             
-            bool snakeAteFood = levelGrid.TrySnakeEatFood(gridPosition);
+            // bool snakeAteFood = levelGrid.TrySnakeEatFood(gridPosition);
 
-            if(snakeAteFood) {
-                snakeBodySize++;
-                CreateSnakeBodyPart();
-            }
+            // if(snakeAteFood) {
+            //     snakeBodySize++;
+            //     CreateSnakeBodyPart();
+            // }
             if(snakeMovePositionList.Count >= snakeBodySize + 1) {
                 snakeMovePositionList.RemoveAt(snakeMovePositionList.Count - 1);
             }
             UpdateSnakeBodyParts();
 
             foreach(SnakeBodyPart snakeBodyPart in snakeBodyPartList) {
-                if(snakeBodyPart.GetGridPosition() ==  gridPosition) {
+                 if(snakeBodyPart.GetGridPosition() ==  gridPosition) {
                     //Game over
                     state = State.Dead;
                     GameHandler.SnakeDied();
                 }
             }
-
-            transform.position = new Vector3(gridPosition.x, gridPosition.y, gridPosition.z);
-            transform.eulerAngles = new Vector3(90,0,GetAngleFromVector(gridMoveDirectionVector) - 90);
+               
 
         }
     }
@@ -154,6 +210,14 @@ public class Snake : MonoBehaviour {
             gridPositionList.Add(snakeMovePosition.GetGridPosition());
         }
         return gridPositionList;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.name == "Food") {
+            levelGrid.snakeAteFood();
+            snakeBodySize++;
+            CreateSnakeBodyPart();
+        }
     }
     private class SnakeBodyPart {
 
