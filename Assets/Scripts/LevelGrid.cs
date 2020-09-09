@@ -8,10 +8,24 @@ using CodeMonkey.Utils;
 public class LevelGrid : MonoBehaviour
 {
     private Vector3 foodGridPosition;
+
+    private List<Vector3> foodPositions;
     private GameObject foodGameObject;
     private int width;
     private int height;
     private Snake snake;
+    
+    static int TOT = 0;
+
+    int MaxObjects = 10;
+    float MinTime = .1f;
+    float MaxTime = .8f;
+    int MinX = 0;
+    int MaxX = 39;
+    int MinY = 0;
+    int MaxY = 14;
+    void Start() {
+    }
 
     public LevelGrid(int width, int height) {
         this.width = width;
@@ -21,10 +35,46 @@ public class LevelGrid : MonoBehaviour
     
     public void Setup(Snake snake) {
         this.snake = snake;
-        SpawnFood();
+        // SpawnFood();
+        foodPositions = new List<Vector3>();
 
     }
-    public void SpawnFood() {
+   
+        // yield;
+        // while(!foodPositions.Contains(foodGridPosition)) {
+        //     foodGridPosition = new Vector3(Random.Range(0,width-1), 10, Random.Range(0,height-1));
+            
+        // }
+        // foodPositions.Insert(0,foodGridPosition);
+        
+      
+
+        
+
+    
+    
+    public void snakeAteFood() {
+        Destroy(foodGameObject);
+        // SpawnFood();
+        GameHandler.AddScore();
+    }
+
+    public Vector3 ValidateGridPosition(Vector3 gridPosition) { 
+        if(gridPosition.x < 0) {
+            gridPosition.x = width - 1;
+        }
+        if(gridPosition.x > width - 1) {
+            gridPosition.x = 0;
+        }
+        if(gridPosition.z <= -height) {
+            gridPosition.z = height - 1;
+        }
+        if(gridPosition.z > height - 1) {
+            gridPosition.z = -(height-1);
+        }
+        return gridPosition;
+    }
+     public void SpawnFood() {
 
         do {
             foodGridPosition = new Vector3(Random.Range(0,width-1), 10, Random.Range(0,height-1));
@@ -41,38 +91,9 @@ public class LevelGrid : MonoBehaviour
 
     }
     
-    public void snakeAteFood() {
-        Destroy(foodGameObject);
-        SpawnFood();
-        GameHandler.AddScore();
-    }
-    // public bool TrySnakeEatFood(Vector3 snakeGridPosition) {
-    
-    //     if(snakeGridPosition == foodGridPosition) {
-    //         Destroy(foodGameObject);
-    //         SpawnFood();
-    //         GameHandler.AddScore();
-    //         return true;
-        
-    //     }
-    //     else {
-    //         return false;
-    //     }
 
-    // }
-    public Vector3 ValidateGridPosition(Vector3 gridPosition) { 
-        if(gridPosition.x < 0) {
-            gridPosition.x = width - 1;
-        }
-        if(gridPosition.x > width - 1) {
-            gridPosition.x = 0;
-        }
-        if(gridPosition.z <= -height) {
-            gridPosition.z = height - 1;
-        }
-        if(gridPosition.z > height - 1) {
-            gridPosition.z = -(height-1);
-        }
-        return gridPosition;
-    }
+       
+
 }
+
+ 

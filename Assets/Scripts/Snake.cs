@@ -33,10 +33,12 @@ public class Snake : MonoBehaviour {
 
     private void Start() {
         speedModifier = 0.01f;
+        
     }
 
     public void Setup(LevelGrid levelGrid) {
         this.levelGrid = levelGrid;
+        InvokeRepeating("spawnFood", 2f, 2f);
         
     }
 
@@ -58,12 +60,19 @@ public class Snake : MonoBehaviour {
             case State.Dead:
                 break;
         }
+        
 
       
        
        
         
     }
+     void spawnFood()
+    {
+
+        levelGrid.SpawnFood();
+    }
+
 
 
 
@@ -97,14 +106,16 @@ public class Snake : MonoBehaviour {
             touch = Input.GetTouch(0);
 
             if(touch.phase == TouchPhase.Moved) {
-               transform.position = new Vector3 (
+               gridPosition = new Vector3 (
                     transform.position.x + touch.deltaPosition.x * speedModifier,
                     transform.position.y,
                     transform.position.z + touch.deltaPosition.y * speedModifier
                 );
+                transform.position = gridPosition;
                 gridMoveDirectionVector = new Vector3(touch.deltaPosition.x, 0, touch.deltaPosition.y);
                 transform.eulerAngles = new Vector3(90,0,GetAngleFromVector(gridMoveDirectionVector) - 90);
-                
+               
+
             }
            
         }
@@ -124,7 +135,7 @@ public class Snake : MonoBehaviour {
             
 
         
-         HandleGridMovement();
+        HandleGridMovement();
 
         
         
@@ -156,7 +167,7 @@ public class Snake : MonoBehaviour {
            
 
 
-            gridPosition = transform.position;
+            
 
             gridPosition = levelGrid.ValidateGridPosition(gridPosition);
             
