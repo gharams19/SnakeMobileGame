@@ -443,6 +443,7 @@ Transform:
   - {fileID: 702768916}
   - {fileID: 657407529}
   - {fileID: 961075648}
+  - {fileID: 1369924061}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1131,6 +1132,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8b2ff688b65f948a6e3e494fe3f0df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1369924060
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1369924061}
+  - component: {fileID: 1369924062}
+  m_Layer: 0
+  m_Name: LevelGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1369924061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369924060}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 366000145}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1369924062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369924060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5ca617ea4b2f5449de49d218aa635b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1376890459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,7 +1626,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1896549204}
   - component: {fileID: 1896549206}
-  - component: {fileID: 1896549205}
   m_Layer: 0
   m_Name: UICamera
   m_TagString: Untagged
@@ -1604,14 +1647,6 @@ Transform:
   m_Father: {fileID: 961075648}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &1896549205
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1896549203}
-  m_Enabled: 1
 --- !u!20 &1896549206
 Camera:
   m_ObjectHideFlags: 0

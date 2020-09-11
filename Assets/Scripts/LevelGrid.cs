@@ -55,7 +55,6 @@ public class LevelGrid : MonoBehaviour
     
     public void snakeAteFood() {
         Destroy(foodGameObject);
-        // SpawnFood();
         GameHandler.AddScore();
     }
 
